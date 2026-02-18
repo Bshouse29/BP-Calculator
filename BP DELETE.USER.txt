@@ -1,0 +1,36 @@
+ED BP DELETE.USER
+BP DELETE.USER
+32 line(s)
+----:
+0001: **********************************
+0002: * Program: BP DELETE.USER
+0003: * Programmer: Brandon House
+0004: * Date: 2/12/2026
+0005: * Desc: This will Delete User
+0006: **********************************
+0007: * Program to safely delete a user record
+0008: PRINT "ENTER USER ID TO DELETE: ":
+0009: INPUT USER.ID
+0010: IF USER.ID = "" THEN STOP
+0011:
+0012: * Open the USER file
+0013: OPEN "USERS" TO F.USERS ELSE STOP "CANNOT OPEN USERS FILE"
+0014:
+0015: * Check if the user exists first
+0016: READ R.USER FROM F.USERS, USER.ID THEN
+0017:     PRINT "-------------------------------------"
+0018:     PRINT "USER FOUND: " : R.USER<1> : " " : R.USER<2>
+0019:     PRINT "-------------------------------------"
+0020:     PRINT "ARE YOU SURE YOU WANT TO DELETE THIS RECORD (Y/N): ";
+0021:     INPUT CONFIRM
+0022:
+0023:     IF OCONV(CONFIRM, "MCU") = "Y" THEN
+0024:        DELETE F.USERS, USER.ID
+0025:        PRINT "RECORD " : USER.ID : " HAS BEEN DELETED."
+0026:     END ELSE
+0027:         PRINT "DELETION CANCELED."
+0028:     END
+0029: END ELSE
+0030:     PRINT "USER ID " : USER.ID : " NOT FOUND."
+0031: END
+0032: * Program to safely delete a user record

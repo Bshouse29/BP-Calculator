@@ -1,0 +1,30 @@
+ED BP SYSTEM.STATUS
+BP SYSTEM.STATUS
+27 line(s)
+0001: ************************************************
+0002: * PROGRAM: SYSTEM.STATUS
+0003: * Programmer: Brandon House
+0004: * Date: 2/11/2026
+0005: * Desc: System dashboard for menu Option 3
+0006: ************************************************
+0007: * Get System Data and Time
+0008: V.DATE = OCONV(DATE(), "D4/")
+0009: V.TIME = OCONV(TIME(), "MTS")
+0010: 0011: PRINT @(-1):"--- SYSTEM DASHBOARD ---"
+0012: PRINT "Current Date: ":V.DATE
+0013: PRINT "Current Time: ":V.TIME
+0014: PRINT "-------------------------------------------------"
+0015:
+0016: * Show who is currently logged in
+0017: PRINT "CURRENTLY ACTIVE USERS:"
+0018: EXECUTE "WHO"
+0019:
+0020: PRINT "-------------------------------------------"
+0021: * Show file statstics for you USERS file
+0022: PRINT "FILE STATISTICS (USERS):"
+0023: EXECUTE "ISTAT USERS"
+0024:
+0025: PRINT "-------------------------------------------"
+0026: PRINT "Press ENTER to return to MENU: ":; INPUT WAIT
+0027: END
+Bottom at line 27

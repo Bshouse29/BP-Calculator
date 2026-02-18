@@ -1,0 +1,68 @@
+:ED BP USER.VIEW
+BP USER.VIEW
+64 line(s)
+0001: ***************************************
+0002: * PROGRAM: USER.VIEW
+0003: * Developer: Brandon House
+0004: * Date: 2/11/2026
+0005: * Desc: Displays a formatted list of all users
+0006: ***************************************
+0007: OPEN 'USERS' TO F.USERS ELSE STOP "Cannot find USERS file"
+0008: OPEN 'EXPORTS' TO F.EXPORTS ELSE NULL ;* Pointer for the CSV
+0009:
+0010: PRINT @(-1):"--- SYSTEM USER LIST ---"
+0011: PRINT "ID             FIRST NAME            LASTNAME            DOB"
+0012: PRINT "-------------  --------------------  ------------------  ------------"
+0013:
+0014: * Select all records in the file
+0015: SELECT F.USERS
+0016:
+0017: DONE = 0
+0018: LOOP
+0019:     READNEXT U.ID ELSE DONE = 1
+0020: UNTIL DONE DO
+0021:     READ R.USER FROM F.USERS, U.ID THEN
+0022:        * Format each attribute for the columns
+0023:        V.ID     = U.ID "L#14"
+0024:        V.FIRST  = R.USER<1> "L#21"
+0025:        V.LAST   = R.USER<2> "L#19"
+0026:        V.DOB    = R.USER<3> "L#19"
+0027:
+0028:        PRINT V.ID:" ":V.FIRST:" ":V.LAST:" ":V.DOB
+0029:      END
+0030: REPEAT
+0031:
+0032: PRINT "---------------------------------------------------------------------"
+0033:
+0034: PRINT "Would you like to export to CSV? (Y/N): ":; INPUT EXPORT
+0035: IF OCONV(EXPORT, "MCU") = "Y" THEN
+0036:    CSV.NAME = "user_export.csv"
+0037:    * Add a "Header Row" so Excel know the column nmaes
+0038:    CSV.DATA = "User ID,First Name,Last Name,DOB" : CHAR(13) : CHAR(10)
+0039:
+0040:    SELECT F.USERS
+0041:    DONE.EXPORT = 0
+0042:    LOOP
+0043:     READNEXT U.ID ELSE DONE.EXPORT = 1
+0044:     UNTIL DONE.EXPORT DO
+0045:       READ R.USER FROM F.USERS, U.ID THEN
+0046:           *Extract attributes
+0047:           FN = R.USER<1>
+0048:           LN = R.USER<2>
+0049:         * OCONV(..., "D2/") turns 20495 in 02/12/26
+0050:         DOB = OCONV(R.USER<3>, "D2/")
+0051:
+0052:           * Build the CSV Line: ID,First,Last,DOB
+0053:           LINE = U.ID : "," : FN : "," : LN : "," : DOB
+0054:           CSV.DATA := LINE : CHAR(13) : CHAR(10)
+0055:        END
+0056:     REPEAT
+0057:
+0058:     * Write the file using standard WRITE to our EXPORTS pointer
+0059:     WRITE CSV.DATA ON F.EXPORTS, CSV.NAME
+0060:     PRINT "CSV Export complete: " : CSV.NAME
+0061:   END
+0062:
+0063: PRINT "Press ENTER to return to MENU.":; INPUT WAIT
+0064: END
+Bottom at line 6

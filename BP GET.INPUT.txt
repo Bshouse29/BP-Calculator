@@ -1,0 +1,22 @@
+ED BP GET.INPUT
+BP GET.INPUT
+18 line(s)
+0001: SUBROUTINE GET.INPUT(PROMPT.TEXT, RESULT)
+0002: * DESC: RESUEABLE INPUT METHOD FOR NUMBERS(NAGS UNTIL VALID)
+0003: LOOP
+0004:    PRINT PROMPT.TEXT : ": " :; INPUT RESULT
+0005:    * Convert q to Q immdiately to simplify checks
+0006:    IF RESULT = "q" THEN RESULT = "Q"
+0007:
+0008:    * Determin if we should exit the loop
+0009:    * 1. It's a number (and not blank)
+0010:    * 2. It's the letter Q
+0011:    VALID = 0
+0012:    IF RESULT # "" THEN
+0013:       IF NUM(RESULT) OR RESULT = "Q" THEN VALID = 1
+0014:    END
+0015: UNTIL VALID DO
+0016:    PRINT "Error: Numeric imput required. Cannot be blank."
+0017: REPEAT
+0018: RETURN
+Bottom at line 1

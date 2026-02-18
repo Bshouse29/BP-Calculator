@@ -1,0 +1,61 @@
+ED BP USER.EDIT
+BP USER.EDIT
+57 line(s)
+0001: *************************************
+0002: * Program: BP USER.EDIT
+0003: * Programmer: Brandon House
+0004: * Date: 2/13/2026
+0005: * Desc: Creating user profile for database V.2
+0006: ************************************
+0007: OPEN 'USERS' TO F.USERS ELSE STOP "Cannot find USERS file"
+0008:
+0009: LOOP
+0010:    PRINT @(-1):"--- USER PROFILE EDITOR ---"
+0011:    PRINT "Enter USER ID (4 chars) or 'Q' to quit: ":; INPUT U.ID
+0012:    IF U.ID = "" OR OCONV(U.ID, "MCU") = "Q" THEN STOP
+0013:
+0014:    * --- VALIDATION: Force Lowercase & Lenght Check ---
+0015:    U.ID = OCONV(U.ID, "MCL")
+0016:    IF LEN(U.ID) # 4 THEN
+0017:       PRINT "ERROR: ID must be exactly 4 characters!"; SLEEP 2
+0018:       CONTINUE ;* Restart the loop
+0019:    END
+0020:
+0021:    * --- READ RECORD ---
+0022:    READ R.USER FROM F.USERS, U.ID ELSE
+0023:       PRINT "User ":U.ID:" not found!"; SLEEP 2
+0024:     CONTINUE
+0025:    END
+0026:
+0027:    PRINT @(-1):"EDITING PROFILE FOR: ":U.ID
+0028:    PRINT "Press ENTER to keep the current value."
+0029:    PRINT "--------------------------------------"
+0030:
+0031:    PRINT "1. First Name [":R.USER<1> "L#15":"]: ":; INPUT NEW.VAL
+0032:    IF NEW.VAL # "" THEN R.USER<1> = NEW.VAL
+0033:
+0034:    PRINT "2. Last Name  [":R.USER<2> "L#15":"]: ":; INPUT NEW.VAL
+0035:    IF NEW.VAL # "" THEN R.USER<2> = NEW.VAL
+0036:
+0037:    PRINT "3. DOB       [":R.USER<3> "L#12":"]: ":; INPUT NEW.VAL
+0038:    IF NEW.VAL # "" THEN R.USER<3> = NEW.VAL
+0039:
+0040:    PRINT "4. Address     [":R.USER<4> "L#24":"]: ":; INPUT NEW.VAL
+0041:    IF NEW.VAL # "" THEN R.USER<4> = NEW.VAL
+0042:
+0043:    PRINT "5. Password  [ (HIDDEN)       ]: ":;
+0044:    ECHO OFF; INPUT NEW.VAL; ECHO ON
+0045:    IF NEW.VAL # "" THEN R.USER<5> = NEW.VAL; PRINT " *Updated*"
+0046:
+0047:    PRINT "---------------------------------------"
+0048:    PRINT "Save changes to ":U.ID:"? (Y/N): ":; INPUT CONF
+0049:    IF OCONV(CONF, "MCU") = "Y" THEN
+0050:       WRITE R.USER ON F.USERS, U.ID
+0051:       PRINT "Record Updated Successfully."
+0052:    END ELSE
+0053:      PRINT "Changes discarded."
+0054:    END
+0055:    SLEEP 2
+0056: REPEAT
+0057: END
+Bottom at line 57
