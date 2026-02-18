@@ -1,0 +1,67 @@
+ED BP USERS
+BP USERS
+63 line(s)
+0001: ****************************************
+0002: * Program: BP USERS
+0003: * Programmer: Brandon House
+0004: * Date:2/14/2026
+0005: * Desc: User Profile
+0006: ****************************************
+0007: OPEN 'USERS' TO F.USERS ELSE STOP "Cannot find USERS file"
+0008:
+0009: LOOP
+0010:    PRINT @(-1):"--- USER MANAGEMENT DASHBOARD ---"
+0011:    PRINT "CURRENT USERS IN SYSTEM:"
+0012:    PRINT "---------------------------------------"
+0013:    EXECUTE "LIST USERS FIRST.NAME LAST.NAME ID.SUPP"
+0014:    PRINT "---------------------------------------"
+0015:
+0016:    PRINT "Enter New Username (4 chars) or 'Q' to quit: ":; INPUT U.ID
+0017:    IF U.ID = "" OR OCONV(U.ID, "MCU") = "Q" THEN STOP
+0018:
+0019:    * --- VALIDATION ---
+0020:    U.ID = OCONV(U.ID, "MCL")
+0021:    IF LEN(U.ID) # 4 THEN
+0022:       PRINT "ERROR: ID must be exactly 4 characters!"; SLEEP 2
+0023:       CONTINUE
+0024:    END
+0025:
+0026:    * Check if user already exists?
+0027:    READ R.USER FROM F.USERS, U.ID THEN
+0028:     PRINT "User ":U.ID:" already exists! User USER.EDIT to change them."
+0029:       SLEEP 2; CONTINUE
+0030:     END ELSE
+0031:        R.USER = ""
+0032:     END
+0033:
+0034:     PRINT "First Name: ":; INPUT F.NAME
+0035:     PRINT "Last Name : ":; INPUT L.NAME
+0036:     PRINT "DOB (MM/DD/YYYY): ":; INPUT U.DOB
+0037: * --- ADDRESS VALIDATION BLOCK ---
+0038:     PRINT "Address    :":; INPUT U.ADDR
+0039:     IF U.ADDR # "" THEN
+0040:         * 1. Basic internal pattern check (Number + String)
+0041:         * Check for: [Number] [Street Name] [City] [State] [Zip]
+0042:         IF U.ADDR MATCHES "1N0N ' ' 1A0X ' ' 1A0X ' ' 2A ' ' 5N" THEN
+0043:            PRINT "Address Format Verified."
+0044:         END ELSE
+0045:            PRINT "Incomplete Address. Please use: Please use: 123 Main St City ST 12345"
+0046:         END
+0047:     END
+0048:     PRINT "Password   :":;
+0049:     ECHO OFF; INPUT U.PASS; ECHO ON
+0050:     PRINT "" ;* Move cursor to next line after hidden input
+0051:
+0052:     R.USER<1> = F.NAME
+0053:     R.USER<2> = L.NAME
+0054:     R.USER<3> = U.DOB
+0055:     R.USER<4> = U.ADDR
+0056:     R.USER<5> = U.PASS
+0057:
+0058:     WRITE R.USER ON F.USERS, U.ID
+0059:     PRINT "Profile for ":U.ID:" has been saved!"
+0060:     SLEEP 2
+0061: REPEAT
+0062: END
+0063:
+Bottom at line 63

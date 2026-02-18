@@ -1,0 +1,66 @@
+ED BP CALCULATOR
+BP CALCULATOR
+62 line(s)
+0001: ***************************************
+0002: * Program: ED BP CALCULATOR
+0003: * Developer: Brandon House
+0004: * Date: 2/12/2026
+0005: * DESC: Scientific calculator v2
+0006: *************************************
+0007: PRINT @(-1):"--- SCIENTIFIC CALCULATOR V2 ---"
+0008: PRINT "Operation: +, -, *, /, ^, QUAD OR Q to quit"
+0009: LOOP
+0010:    PRINT "Select Operation: ":; INPUT OP
+0011:    OP = OCONV(OP, "MCU")
+0012:    UNTIL OP = "Q" OR OP = "q" DO
+0013:    RESULT = ""
+0014:
+0015:    BEGIN CASE
+0016:       * --- QUADRATIC LOGIC (3 INPUTS) ---
+0017:       CASE OP = "QUAD"
+0018:          CALL GET.INPUT("Enter A", VA)
+0019:          CALL GET.INPUT("Enter B", VB)
+0020:          CALL GET.INPUT("Enter C", VC)
+0021:          IF VA = 0 THEN
+0022:             RESULT = "ERROR: 'A' CANNOT BE ZERO"
+0023:          END ELSE
+0024:             DISC = (VB * VB) - (4 * VA * VC)
+0025:             IF DISC < 0 THEN
+0026:                RESULT = "NO REAL ROOTS"
+0027:             END ELSE
+0028:             R1 = (-VB + SQRT(DISC)) / (2 * VA)
+0029:             R2 = (-VB - SQRT(DISC)) / (2 * VA)
+0030:             RESULT = "X1=":R1:" X2=":R2
+0031:          END
+0032:     END
+0033:
+0034:     * --- CLEAN THE INPUT ----
+0035:        CASE OP = "+" OR OP = "-" OR OP = "*" OR OP = "/" OR "^"
+0036:         CALL GET.INPUT("Number 1", NUM1)
+0037:           IF NUM1 = "Q" THEN CONTINUE
+0038:         CALL GET.INPUT("Number 2", NUM2)
+0039:           IF NUM2 = "Q" THEN CONTINUE
+0040:        BEGIN CASE
+0041:           CASE OP = "+"; RESULT = NUM1 + NUM2
+0042:           CASE OP = "-"; RESULT = NUM1 - NUM2
+0043:           CASE OP = "*"; RESULT = NUM1 * NUM2
+0044:           CASE OP = "^" OR OP = "PWR"
+0045:           IF NUM2 > 50 THEN
+0046:              PRINT "The 2nd entry cannot be greater then 50."
+0047:           END ELSE
+0048:              RESULT = NUM1 ^ NUM2
+0049:           END
+0050:           CASE OP = "/"
+0051:              IF NUM2 # 0 THEN RESULT = NUM1 / NUM2 ELSE RESULT = "DIV BY ZERO"
+0052:        END CASE
+0053:     * --- INVALID ENTRY ---
+0054:     CASE 1
+0055:        RESULT = "INVALID OPERATOR"
+0056:    END CASE
+0057:
+0058:     PRINT ">>> ":RESULT
+0059:     PRINT ""
+0060: REPEAT
+0061: PRINT "Exiting Calculator..."
+0062: END
+Bottom at line 62

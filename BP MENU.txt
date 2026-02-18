@@ -1,0 +1,97 @@
+ED BP MENU
+BP MENU
+93 line(s)
+0001: ******************************************************************
+0002: * PROGRAM: LOGIN SYSTEM
+0003: * AUTHOR:  Brandon House
+0004: * DATE:    2026-02-11
+0005: * DESC:    LOGIN CREDITALS
+0006: ******************************************************************
+0007: * --- LOGIN SECURITY LAYER ---
+0008: OPEN 'USERS' TO F.USERS ELSE STOP "Cannot find USER file"
+0009: AUTHENTICATED = 0
+0010: U.ID = "";
+0011: U.PW = "";
+0012: R.USER = ""
+0013: LOOP
+0014:    PRINT @(-1):"---SYSTEM LOGIN ----"
+0015:   PRINT "Username: ":; INPUT U.ID
+0016:   IF U.ID = "Q" THEN STOP
+0017:   PRINT "Password: ":;
+0018: *ECHO OFF
+0019:   INPUT U.PM
+0020: *ECHO ON
+0021:
+0022:     * 1. Check for Hardcoded Admin Backdoor
+0023:      IF U.ID = "admin" AND U.PW = "1234" THEN
+0024:         AUTHENTICATED = 1
+0025:      END ELSE
+0026:         * 2. Dynamic Look up in USERS file
+0027:        READ R.USERS FROM F.USERS, U.ID THEN
+0028:             * Attribute 5 is the password we just added to BP USERS
+0029:            IF U.PW = R.USER<5> THEN
+0030:               AUTHENTICATED = 1
+0031:            END ELSE
+0032:               PRINT "Invalid Password!"
+0033:               SLEEP 2
+0034:            END
+0035:         END ELSE
+0036:             PRINT "User not found."
+0037:             SLEEP 2
+0038:         END
+0039:      END
+0040: UNTIL AUTHENTICATED DO REPEAT
+0041:
+0042:
+0043: ******************************************************************
+0044: * PROGRAM: MAIN
+0045: * AUTHOR:  Brandon House
+0046: * DATE:    2026-02-11
+0047: * DESC:    MAIN MENU
+0048: ******************************************************************
+0049: LOOP
+0050:    * Clear the screen (Works in the most ScarletDME terminals)
+0051: PRINT @(-1)
+0052: PRINT "==============================="
+0053: PRINT "    MY PICK BASIC COLLECTION    "
+0054: PRINT "==============================="
+0055: PRINT " 1. RUN CALCULATOR"
+0056: PRINT " 2. FILE VIEWER"
+0057: PRINT " 3. SYSTEM STATUS"
+0058: PRINT " 4. CREATE A USER"
+0059: PRINT " 5. EDIT EXISTING USER"
+0060: PRINT " 6. DELETE A USER"
+0061: PRINT " 7. LOAD USERS FROM A FILE"
+0062: PRINT " Q. EXIT"
+0063: PRINT "==============================="
+0064: PRINT "Choose an option: ":
+0065: INPUT OPTION
+0066:
+0067: UNTIL OPTION = "Q" OR OPTION = "q" DO
+0068:   BEGIN CASE
+0069:     CASE OPTION = "1"
+0070:       * This runs your Cataloged program
+0071:       EXECUTE "RUN BP CALCULATOR"
+0072:     CASE OPTION = "2"
+0073:        * This is built-in system command
+0074:        EXECUTE "RUN BP USER.VIEW"
+0075:     CASE OPTION = "3"
+0076:        * Shows users logged in
+0077:        EXECUTE "RUN BP SYSTEM.STATUS"
+0078:        PRINT "Press Enter to continue...":
+0079:      CASE OPTION = "4"; EXECUTE "RUN BP USERS"
+0080:      CASE OPTION = "5";
+0081:      * Call the new editor
+0082:      EXECUTE "RUN BP USER.EDIT"
+0083:      * To delete a user
+0084:      CASE OPTION = "6"; EXECUTE "RUN BP DELETE.USER"
+0085:      INPUT WAIT
+0086:      CASE OPTION = "7"; EXECUTE "RUN BP LOAD.USERS"
+0087:     CASE 1
+0088:        PRINT "Invalid selection!"
+0089:        SLEEP 1
+0090:   END CASE
+0091:      PRINT "Choose an option (or Q): ":; INPUT OPTION
+0092: REPEAT
+0093: END
+Bottom at line 93
